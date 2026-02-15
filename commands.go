@@ -31,7 +31,25 @@ func commandMap(cfg *config) error {
 	}
 	cfg.nextURL = locationAreaList.Next
 	cfg.prevURL = locationAreaList.Prev
-	locations := locationAreaList.Results[0:20]
+	locations := locationAreaList.Results
+	for _, location := range locations {
+		fmt.Println(location.Name)
+	}
+	return nil
+}
+
+func commandMapB(cfg *config) error {
+	if cfg.prevURL == nil {
+		fmt.Println("you're on the first page")
+		return nil
+	}
+	locationAreaList, err := pokeapi.GetLocationAreas(cfg.prevURL)
+	if err != nil {
+		return err
+	}
+	cfg.nextURL = locationAreaList.Next
+	cfg.prevURL = locationAreaList.Prev
+	locations := locationAreaList.Results
 	for _, location := range locations {
 		fmt.Println(location.Name)
 	}
